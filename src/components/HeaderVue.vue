@@ -1,13 +1,16 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import router from '../router';
+
+const search = ref('');
 </script>
 
 <template>
   <header class="header">
     <h1>Rick and Motry</h1>
     <div class="search">
-      <input type="text">
-      <div class="button">Search</div>
+      <input type="text" placeholder="Search" v-model="search">
+      <div class="button" @click="router.replace({ query: { search: search } })">Search</div>
     </div>
     <img @click="() => router.push('/')" alt="Rick and Morty" class="logo" src="/favicon96.png" />
   </header>
@@ -44,8 +47,15 @@ h1 {
   border-radius: 0.2rem;
   background-color: var(--dark-blue);
   font-weight: 300;
+  transition-duration: 2ms;
+
   &:hover {
     filter: hue-rotate(180deg);
+  }
+
+  &:active {
+    transform: scale(0.95);
+    transition-duration: 2ms;
   }
 }
 
@@ -65,6 +75,7 @@ h1 {
 
   @media screen and (max-width: 500px) {
     padding: 0.1rem;
+
     h1 {
       display: none;
     }
