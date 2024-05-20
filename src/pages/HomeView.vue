@@ -1,9 +1,11 @@
 <script setup lang="ts">
-console.log('start')
+import type { Character, Pages } from '@/utils/types';
+const props = defineProps<{pages: Pages, characters: Character[]}>()
 </script>
 
 <template>
   <main>
-    Empty Project
+    {{ pages }}
+    {{ characters }}
   </main>
 </template>
