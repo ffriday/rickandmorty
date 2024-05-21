@@ -19,9 +19,9 @@ watch(() => [route.query.name, route.query.status], async () => {
 
 const setSeatchParams = (home: boolean = false) => {
   if (home) {
-    router.push({ path: '/', query: { name: '', status: '' } })
+    router.push({ path: '/', query: { name: '', status: '', page: 0 } })
   } else {
-    router.push({ query: { name: name.value, status: status.value } })
+    router.push({ query: { name: name.value, status: status.value, page: 0 } })
   }
 }
 </script>
