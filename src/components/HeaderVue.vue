@@ -2,10 +2,13 @@
 import { ref } from 'vue';
 import router from '../router';
 
-defineEmits(['loading'])
 const props = defineProps<{ isLoading: boolean }>()
 const name = ref('');
 const status = ref('');
+
+const setSeatchParams = () => {
+  router.push({ query: { name: name.value, status: status.value } })
+}
 </script>
 
 <template>
@@ -16,7 +19,7 @@ const status = ref('');
         <input type="text" placeholder="Name" v-model="name">
         <input type="text" placeholder="Status" v-model="status">
       </div>
-      <div :class="{ disabled: isLoading, button: true }" @click="$emit('loading')">{{ isLoading ? 'Loading' : 'Filter'
+      <div :class="{ disabled: props.isLoading, button: true }" @click="setSeatchParams">{{ props.isLoading ? 'Loading' : 'Filter'
         }}</div>
     </div>
     <img @click="() => router.push('/')" alt="Rick and Morty" class="logo" src="/favicon96.png" />

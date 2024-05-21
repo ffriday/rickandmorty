@@ -45,5 +45,5 @@ export type MyResponse = {
 export type Pages = {
   prev: boolean;
   next: boolean;
-  current: number;
+  total: number;
 }

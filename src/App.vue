@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { RouterView, useRoute } from 'vue-router'
 import HeaderVue from '@components/HeaderVue.vue';
-import { ref } from 'vue';
+import PaginationVue from '@components/PaginationVue.vue';
+import { ref, watch } from 'vue';
 import { api } from './main';
 import { resolveParams } from './utils/resolveParams'
 import type { Pages, Character } from './utils/types'
 
 const route = useRoute()
 const isLoading = ref(false)
-const pages = ref<Pages>({ prev: false, next: false, current: 0 })
+const pages = ref<Pages>({ prev: false, next: false, total: 0 })
 const characters = ref<Character[]>([])
 
 const load = async () => {
@@ -18,7 +19,7 @@ const load = async () => {
     pages.value = {
       prev: Boolean(response.data.info.prev),
       next: Boolean(response.data.info.next),
-      current: response.data.info.count
+      total: response.data.info.count
     }
     characters.value = response.data.results
     response.data.results
@@ -27,11 +28,16 @@ const load = async () => {
   }
   isLoading.value = false
 }
+
+watch(() => [route.query.name, route.query.status, route.query.page], () => {
+  load()
+})
 </script>
 
 <template>
-  <HeaderVue :isLoading="isLoading" @loading="load" />
-  <RouterView :characters="characters" :pages="pages"/>
+  <HeaderVue :isLoading="isLoading" />
+  <RouterView :characters="characters" :pages="pages" />
+  <PaginationVue :pages="pages" />
 </template>
 
 <style scoped>
