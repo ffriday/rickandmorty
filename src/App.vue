@@ -9,7 +9,9 @@ import type { Pages, Character } from './utils/types'
 
 const route = useRoute()
 const isLoading = ref(false)
-const pages = ref<Pages>({ prev: false, next: false, total: 0 })
+const error = ref('')
+const initialPages = { prev: false, next: false, total: 0 }
+const pages = ref<Pages>(initialPages)
 const characters = ref<Character[]>([])
 
 const load = async () => {
@@ -19,12 +21,15 @@ const load = async () => {
     pages.value = {
       prev: Boolean(response.data.info.prev),
       next: Boolean(response.data.info.next),
-      total: response.data.info.count
+      total: response.data.info.pages
     }
     characters.value = response.data.results
+    error.value = ''
     response.data.results
-  } else {
-    console.error(response.error)
+  }
+  if (response.error) {
+    error.value = response.error
+    pages.value = initialPages
   }
   isLoading.value = false
 }
@@ -36,7 +41,7 @@ watch(() => [route.query.name, route.query.status, route.query.page], () => {
 
 <template>
   <HeaderVue :isLoading="isLoading" />
-  <RouterView :characters="characters" :pages="pages" />
+  <RouterView :characters="characters" :error="error" />
   <PaginationVue :pages="pages" />
 </template>
 

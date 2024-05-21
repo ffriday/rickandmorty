@@ -6,10 +6,23 @@
   --light-blue: rgb(191, 236, 247);
   --normal-blue: #9ce2f3;
   --dark-blue: #24bbe1;
+  --deep-blue: #d31717;
+  --light-gray: #f6f4f4;
+  --dark-gray: #9e9d9d;
+  --light-green: #49e035;
 
   --header-background: var(--light-blue);
   --header-border: var(--normal-blue);
   --button-background: var(--dark-blue);
+  --link-active: var(--deep-blue);
+  --character-card-background: var(--light-gray);
+  --status-alive: var(--light-green);
+  --status-dead: var(--dark-gray);
+
+  /* Dimensions */
+  --image-size: 170px;
+  --image-border-radius: 10px;
+  --caracter-card-size: 400px;
 }
 
 body {

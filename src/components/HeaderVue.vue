@@ -1,13 +1,28 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import router from '../router';
+import { useRoute, useRouter } from 'vue-router';
+import { resolveParam } from '@/utils/resolveParams';
 
+const statuses = [{ All: '' }, { Alive: 'alive' }, { Dead: 'dead' }, { Unknown: 'unknown' }]
 const props = defineProps<{ isLoading: boolean }>()
+const route = useRoute()
+const vueRouter = useRouter()
 const name = ref('');
 const status = ref('');
 
-const setSeatchParams = () => {
-  router.push({ query: { name: name.value, status: status.value } })
+watch(() => [route.query.name, route.query.status], async () => {
+  await vueRouter.isReady()
+  name.value = resolveParam(route.query.name)
+  status.value = resolveParam(route.query.status)
+})
+
+const setSeatchParams = (home: boolean = false) => {
+  if (home) {
+    router.push({ path: '/', query: { name: '', status: '' } })
+  } else {
+    router.push({ query: { name: name.value, status: status.value } })
+  }
 }
 </script>
 
@@ -16,13 +31,20 @@ const setSeatchParams = () => {
     <h1>Rick and Motry</h1>
     <div class="filter">
       <div class="filter_container">
-        <input type="text" placeholder="Name" v-model="name">
-        <input type="text" placeholder="Status" v-model="status">
+        <input type="text" placeholder="Name" v-model="name" @keypress.enter="() => setSeatchParams()">
+        <select name="status" placeholder="Status" v-model="status">
+          <option v-for="value in statuses" :value="Object.values(value)[0]" :key="Object.keys(value)[0]"
+            :selected="status === Object.values(value)[0]">
+            {{ Object.keys(value)[0] }}
+          </option>
+        </select>
       </div>
-      <div :class="{ disabled: props.isLoading, button: true }" @click="setSeatchParams">{{ props.isLoading ? 'Loading' : 'Filter'
+      <div :class="{ disabled: props.isLoading, button: true }" @click="() => setSeatchParams()">{{ props.isLoading ?
+          'Loading'
+          : 'Filter'
         }}</div>
     </div>
-    <img @click="() => router.push('/')" alt="Rick and Morty" class="logo" src="/favicon96.png" />
+    <img @click="() => setSeatchParams(true)" alt="Rick and Morty" class="logo" src="/favicon96.png" />
   </header>
 </template>
 

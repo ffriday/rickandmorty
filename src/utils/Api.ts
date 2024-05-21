@@ -3,6 +3,7 @@ import type { MyResponse, SearchParams } from './types';
 export class Api {
   private _baseURL: string;
   private _charactersURL = 'character'
+  private initialData = { info: { count: 0, pages: 0, next: null, prev: null }, results: []}
   constructor(baseURL: string) {
     this._baseURL = baseURL;
   }
@@ -12,15 +13,15 @@ export class Api {
     try {
       const res = await fetch(fullURL.toString());
       if (!res.ok) {
-        return { error: res.statusText }
+        return { data: this.initialData, error: `Error: ${res.status}` }
       }
       const data = await res.json();
-      return { data }
+      return { data, error: '' }
     } catch (err) {
       if (err instanceof Error) {
-        return { error: err.message }
+        return { data: this.initialData, error: err.message }
       } else {
-        return { error: 'Unknown error' }
+        return { data: this.initialData, error: 'Unknown error' }
       }
     }
   }
