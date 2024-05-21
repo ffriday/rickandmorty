@@ -15,7 +15,7 @@ const getCurrentPage = (): number => {
 const currentPage = ref(getCurrentPage())
 
 const setSeatchParams = (next: boolean) => {
-  router.push({ query: { page: next ? currentPage.value + 1 : currentPage.value - 1 } })
+  router.push({ query: { ...route.query, page: next ? currentPage.value + 1 : currentPage.value - 1 } })
 }
 
 watch(() => route.query.page, () => {
