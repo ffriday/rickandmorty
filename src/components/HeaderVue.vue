@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import router from '../router';
 
 defineEmits(['loading'])
-const props = defineProps(['isLoading'])
+const props = defineProps<{ isLoading: boolean }>()
 const name = ref('');
 const status = ref('');
 </script>
@@ -16,8 +16,8 @@ const status = ref('');
         <input type="text" placeholder="Name" v-model="name">
         <input type="text" placeholder="Status" v-model="status">
       </div>
-      <div :class="{ disabled: isLoading, button: true }" @click="$emit('loading')"
-        :aria-disabled="props.isLoading">{{ isLoading ? 'Loading' : 'Filter' }}</div>
+      <div :class="{ disabled: isLoading, button: true }" @click="$emit('loading')">{{ isLoading ? 'Loading' : 'Filter'
+        }}</div>
     </div>
     <img @click="() => router.push('/')" alt="Rick and Morty" class="logo" src="/favicon96.png" />
   </header>
@@ -65,6 +65,8 @@ h1 {
   font-weight: 300;
   transition-duration: 2ms;
   max-height: 1.2rem;
+  min-width: 70px;
+  text-align: center;
 
   &:hover {
     filter: hue-rotate(180deg);
@@ -102,5 +104,10 @@ h1 {
       height: 25px;
     }
   }
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
 }
 </style>
